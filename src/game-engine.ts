@@ -1,7 +1,11 @@
 // Core game engine for Exodus Adventure
+export interface Inventory {
+  [item: string]: number;
+}
+
 export interface GameState {
   scene: string;
-  inventory: string[];
+  inventory: Inventory;
   history: string[];
 }
 
@@ -21,7 +25,7 @@ export class ExodusGame {
 
   constructor(scenes: Scene[], initialScene: string) {
     this.scenes = Object.fromEntries(scenes.map(s => [s.id, s]));
-    this.state = { scene: initialScene, inventory: [], history: [] };
+    this.state = { scene: initialScene, inventory: {}, history: [] };
   }
 
   getCurrentScene(): Scene {

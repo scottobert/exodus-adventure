@@ -1,15 +1,21 @@
 import './style.css';
 import { ExodusGame } from './game-engine';
 
+// Utility to add inventory item
+function addInventory(state: any, item: string, amount = 1) {
+  if (!state.inventory[item]) state.inventory[item] = 0;
+  state.inventory[item] += amount;
+}
+
 // Define initial scenes for the Exodus story
 const scenes = [
   {
     id: 'burning-bush',
     description: 'You see a bush that burns but is not consumed. A voice calls your name: "Moses, Moses!"',
     options: [
-      { text: 'Approach the bush', nextScene: 'god-speaks', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('faith')) state.inventory.push('faith'); } },
+      { text: 'Approach the bush', nextScene: 'god-speaks', effect: (state: any) => { addInventory(state, 'faith'); } },
       { text: 'Run away', nextScene: 'run-away' },
-      { text: 'Look for a staff nearby', nextScene: 'find-staff', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('staff')) state.inventory.push('staff'); } }
+      { text: 'Look for a staff nearby', nextScene: 'find-staff', effect: (state: any) => { addInventory(state, 'staff'); } }
     ]
   },
   {
@@ -23,7 +29,7 @@ const scenes = [
     id: 'god-speaks',
     description: 'God speaks to you from the bush: "Take off your sandals, for the place where you are standing is holy ground."',
     options: [
-      { text: 'Remove sandals and listen', nextScene: 'mission', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('obedience')) state.inventory.push('obedience'); } }
+      { text: 'Remove sandals and listen', nextScene: 'mission', effect: (state: any) => { addInventory(state, 'obedience'); } }
     ]
   },
   {
@@ -37,7 +43,7 @@ const scenes = [
     id: 'mission',
     description: 'God gives you a mission: "Go to Pharaoh and bring my people out of Egypt."',
     options: [
-      { text: 'Accept the mission', nextScene: 'accepted', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('trust')) state.inventory.push('trust'); } },
+      { text: 'Accept the mission', nextScene: 'accepted', effect: (state: any) => { addInventory(state, 'trust'); } },
       { text: 'Refuse', nextScene: 'refused' }
     ]
   },
@@ -60,7 +66,7 @@ const scenes = [
     description: 'You stand before Pharaoh. He looks at you with suspicion. "Let my people go," you declare.',
     options: [
       { text: 'Demand release', nextScene: 'pharaoh-refuses' },
-      { text: 'Show a sign', nextScene: 'staff-to-snake', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('staff')) state.inventory.push('borrowed staff'); } },
+      { text: 'Show a sign', nextScene: 'staff-to-snake', effect: (state: any) => { addInventory(state, 'borrowed staff'); } },
       { text: 'Offer a gift', nextScene: 'pharaoh-softens' } // No reward for this path
     ]
   },
@@ -96,7 +102,7 @@ const scenes = [
     id: 'staff-to-snake',
     description: 'You throw your staff down and it becomes a snake! Pharaoh’s magicians do the same. Pharaoh is unimpressed.',
     options: [
-      { text: 'Warn of plagues', nextScene: 'plagues-begin', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('perseverance')) state.inventory.push('perseverance'); } }
+      { text: 'Warn of plagues', nextScene: 'plagues-begin', effect: (state: any) => { addInventory(state, 'perseverance'); } }
     ]
   },
   {
@@ -115,8 +121,8 @@ const scenes = [
     id: 'red-sea',
     description: 'You reach the Red Sea. Pharaoh’s army is pursuing you! The people panic.',
     options: [
-      { text: 'Raise your staff', nextScene: 'sea-parts', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('staff')) state.inventory.push('miraculous staff'); if (!state.inventory.includes('deliverance')) state.inventory.push('deliverance'); } },
-      { text: 'Pray for help', nextScene: 'sea-parts', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('deliverance')) state.inventory.push('deliverance'); } },
+      { text: 'Raise your staff', nextScene: 'sea-parts', effect: (state: any) => { addInventory(state, 'miraculous staff'); addInventory(state, 'deliverance'); } },
+      { text: 'Pray for help', nextScene: 'sea-parts', effect: (state: any) => { addInventory(state, 'deliverance'); } },
       { text: 'Look for another way around', nextScene: 'lost-in-desert' }
     ]
   },
@@ -127,10 +133,26 @@ const scenes = [
       { text: 'Return to the sea', nextScene: 'red-sea' }]
   },
   {
+    id: 'sea-parts',
+    description: 'The sea miraculously parts! Do you lead the people through?',
+    options: [
+      { text: 'Go back to the safety of Egypt and rule under Pharaoh.', nextScene: 'partial-freedom' },
+      { text: 'Lead the people through the sea', nextScene: 'crossing-red-sea' }
+    ]
+  },
+  {
+    id: 'crossing-red-sea',
+    description: 'You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.',
+    options: [
+      { text: 'Celebrate the deliverance', nextScene: 'mount-sinai', effect: (state: any) => { addInventory(state, 'deliverance'); } },
+      { text: 'Check your inventory', nextScene: 'show-inventory' }
+    ]
+  },
+  {
     id: 'mount-sinai',
     description: 'At Mount Sinai, God gives you the Ten Commandments. The people begin a new life as a free nation.',
     options: [
-      { text: 'Reflect on the journey', nextScene: 'end', effect: (state: import('./game-engine').GameState) => { if (!state.inventory.includes('wisdom')) state.inventory.push('wisdom'); } },
+      { text: 'Reflect on the journey', nextScene: 'end', effect: (state: any) => { addInventory(state, 'wisdom'); } },
       { text: 'Check your inventory', nextScene: 'show-inventory' }]
   },
   {
@@ -154,18 +176,29 @@ function render() {
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
   const state = game.getState();
-  // Show inventory on all screens after first item is obtained
+
+  // Header bar with title and inventory
   let inventoryHtml = '';
-  if (state.inventory.length > 0) {
-    inventoryHtml = `<div style="margin-bottom:1em;"><strong>Inventory:</strong> ${state.inventory.join(', ')}</div>`;
+  const items = Object.entries(state.inventory);
+  if (items.length > 0) {
+    inventoryHtml = `<div class="header-inventory-list">${items.map(([item, count]) => `
+      <div class=\"inventory-box\"><span class=\"inventory-item\">${item}</span><span class=\"inventory-count\">${count}</span></div>
+    `).join('')}</div>`;
+  } else {
+    inventoryHtml = `<div class="header-inventory-list">Nothing</div>`;
   }
-  // Special case for show-inventory scene (already handled)
-  if (scene.id === 'show-inventory') {
-    inventoryHtml = `<div style="margin-bottom:1em;"><strong>Inventory:</strong> ${state.inventory.length ? state.inventory.join(', ') : 'Nothing'}</div>`;
-  }
+
+  const headerHtml = `
+    <header class="game-header">
+      <span class="header-title">Exodus Adventure</span>
+      ${inventoryHtml}
+    </header>
+  `;
+
   app.innerHTML = `
+    ${headerHtml}
     <div class="game-container">
-      <div class="scene-description">${scene.description}${inventoryHtml}</div>
+      <div class="scene-description">${scene.description}</div>
       <div class="options">
         ${(scene.options || []).map((opt: any, i: number) => `<button data-index="${i}">${opt.text}</button>`).join('')}
       </div>
