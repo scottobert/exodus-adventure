@@ -7,173 +7,20 @@ function addInventory(state: any, item: string, amount = 1) {
   state.inventory[item] += amount;
 }
 
-// Define initial scenes for the Exodus story
-const scenes = [
-  {
-    id: 'burning-bush',
-    description: 'You see a bush that burns but is not consumed. A voice calls your name: "Moses, Moses!"',
-    backgroundImage: 'burning-bush.png', // Example image filename (should be in public/)
-    bibleVerse: { book: 'Exodus', chapter: 3, verses: [2] },
-    options: [
-      { text: 'Approach the bush', nextScene: 'god-speaks', effect: (state: any) => { addInventory(state, 'faith'); } },
-      { text: 'Run away', nextScene: 'run-away' },
-      { text: 'Look for a staff nearby', nextScene: 'find-staff', effect: (state: any) => { addInventory(state, 'staff'); } }
-    ]
-  },
-  {
-    id: 'find-staff',
-    description: 'You find a sturdy staff on the ground. It may be useful later.',
-    options: [
-      { text: 'Return to the bush', nextScene: 'god-speaks' }
-    ]
-  },
-  {
-    id: 'god-speaks',
-    description: 'God speaks to you from the bush: "Take off your sandals, for the place where you are standing is holy ground."',
-    options: [
-      { text: 'Remove sandals and listen', nextScene: 'mission', effect: (state: any) => { addInventory(state, 'obedience'); } }
-    ]
-  },
-  {
-    id: 'run-away',
-    description: 'You run away, but the memory of the burning bush stays with you.',
-    options: [
-      { text: 'Return to the bush', nextScene: 'burning-bush' }
-    ]
-  },
-  {
-    id: 'mission',
-    description: 'God gives you a mission: "Go to Pharaoh and bring my people out of Egypt."',
-    options: [
-      { text: 'Accept the mission', nextScene: 'accepted', effect: (state: any) => { addInventory(state, 'trust'); } },
-      { text: 'Refuse', nextScene: 'refused' }
-    ]
-  },
-  {
-    id: 'accepted',
-    description: 'You accept God’s mission. Your journey begins! You travel to Egypt to confront Pharaoh.',
-    options: [
-      { text: 'Go to Pharaoh’s palace', nextScene: 'pharaoh-palace' }
-    ]
-  },
-  {
-    id: 'refused',
-    description: 'You refuse, but God encourages you to trust Him.',
-    options: [
-      { text: 'Accept the mission', nextScene: 'accepted' }
-    ]
-  },
-  {
-    id: 'pharaoh-palace',
-    description: 'You stand before Pharaoh. He looks at you with suspicion. "Let my people go," you declare.',
-    options: [
-      { text: 'Demand release', nextScene: 'pharaoh-refuses' },
-      { text: 'Show a sign', nextScene: 'staff-to-snake', effect: (state: any) => { addInventory(state, 'borrowed staff'); } },
-      { text: 'Offer a gift', nextScene: 'pharaoh-softens' } // No reward for this path
-    ]
-  },
-  {
-    id: 'pharaoh-softens',
-    description: 'Pharaoh is surprised by your gift. He seems less hostile, but still refuses to let the people go.',
-    options: [
-      { text: 'Warn of plagues', nextScene: 'plagues-begin' },
-      { text: 'Try to negotiate', nextScene: 'negotiation' }
-    ]
-  },
-  {
-    id: 'negotiation',
-    description: 'You attempt to negotiate with Pharaoh. He offers to let only some people go.',
-    options: [
-      { text: 'Accept partial freedom', nextScene: 'partial-freedom' },
-      { text: 'Insist on full freedom', nextScene: 'pharaoh-refuses' }
-    ]
-  },
-  {
-    id: 'partial-freedom',
-    description: 'Some Israelites are freed, but many remain. The story ends with hope for the rest.',
-    options: []
-  },
-  {
-    id: 'pharaoh-refuses',
-    description: 'Pharaoh refuses to let the Israelites go. God tells you to warn him of plagues.',
-    options: [
-      { text: 'Warn of plagues', nextScene: 'plagues-begin' }
-    ]
-  },
-  {
-    id: 'staff-to-snake',
-    description: 'You throw your staff down and it becomes a snake! Pharaoh’s magicians do the same. Pharaoh is unimpressed.',
-    options: [
-      { text: 'Warn of plagues', nextScene: 'plagues-begin', effect: (state: any) => { addInventory(state, 'perseverance'); } }
-    ]
-  },
-  {
-    id: 'plagues-begin',
-    description: 'The plagues begin: water turns to blood, frogs, gnats, and more. Pharaoh’s heart remains hard.',
-    options: [
-      { text: 'Continue with more plagues', nextScene: 'final-plague' }]
-  },
-  {
-    id: 'final-plague',
-    description: 'The final plague strikes: the death of the firstborn. Pharaoh finally lets the Israelites go.',
-    options: [
-      { text: 'Lead the people out', nextScene: 'red-sea' }]
-  },
-  {
-    id: 'red-sea',
-    description: 'You reach the Red Sea. Pharaoh’s army is pursuing you! The people panic.',
-    options: [
-      { text: 'Raise your staff', nextScene: 'sea-parts', effect: (state: any) => { addInventory(state, 'miraculous staff'); addInventory(state, 'deliverance'); } },
-      { text: 'Pray for help', nextScene: 'sea-parts', effect: (state: any) => { addInventory(state, 'deliverance'); } },
-      { text: 'Look for another way around', nextScene: 'lost-in-desert' }
-    ]
-  },
-  {
-    id: 'lost-in-desert',
-    description: 'You try to find another way, but get lost in the desert. The journey is much harder.',
-    options: [
-      { text: 'Return to the sea', nextScene: 'red-sea' }]
-  },
-  {
-    id: 'sea-parts',
-    description: 'The sea miraculously parts! Do you lead the people through?',
-    options: [
-      { text: 'Go back to the safety of Egypt and rule under Pharaoh.', nextScene: 'partial-freedom' },
-      { text: 'Lead the people through the sea', nextScene: 'crossing-red-sea' }
-    ]
-  },
-  {
-    id: 'crossing-red-sea',
-    description: 'You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.',
-    options: [
-      { text: 'Celebrate the deliverance', nextScene: 'mount-sinai', effect: (state: any) => { addInventory(state, 'deliverance'); } },
-    ]
-  },
-  {
-    id: 'mount-sinai',
-    description: 'At Mount Sinai, God gives you the Ten Commandments. The people begin a new life as a free nation.',
-    options: [
-      { text: 'Reflect on the journey', nextScene: 'end', effect: (state: any) => { addInventory(state, 'wisdom'); } },
-    ]
-  },
-  {
-    id: 'end',
-    description: 'You have led your people out of Egypt and received God’s law. The adventure continues in the wilderness...',
-    options: []
-  }
-];
+let scenes: Scene[] = [];
 
-function filterOptions(scene: Scene, state: any) {
-  // Hide options that require the staff if the player doesn't have it
-  if (scene.id === 'pharaoh-palace' || scene.id === 'red-sea') {
-    return scene.options.filter(opt => {
-      if (opt.text.toLowerCase().includes('staff')) {
-        return state.inventory['staff'] > 0;
-      }
-      return true;
-    });
-  }
-  return scene.options;
+async function loadScenes() {
+  const res = await fetch('scenes.json');
+  const data = await res.json();
+  scenes = data.map((scene: any) => ({
+    ...scene,
+    options: scene.options.map((opt: any) => ({
+      ...opt,
+      effect: opt.effect
+        ? function(state: any) { if (state) { return (new Function('state', 'addInventory', opt.effect))(state, addInventory); } } 
+        : undefined
+    }))
+  }));
 }
 
 const game = new ExodusGame(scenes, 'burning-bush');
@@ -219,7 +66,25 @@ async function fetchBibleVerse(reference: Scene["bibleVerse"]): Promise<string> 
   }
 }
 
+// filterOptions function for staff logic
+function filterOptions(scene: Scene, state: any) {
+  if (scene.id === 'pharaoh-palace' || scene.id === 'red-sea') {
+    return scene.options.filter(opt => {
+      if (opt.text.toLowerCase().includes('staff')) {
+        return state.inventory['staff'] > 0;
+      }
+      return true;
+    });
+  }
+  return scene.options;
+}
+
 async function render() {
+  if (scenes.length === 0) {
+    await loadScenes();
+    // Patch: update game.scenes via a method, not direct property
+    (game as any).scenes = Object.fromEntries(scenes.map(s => [s.id, s]));
+  }
   const scene = game.getCurrentScene();
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
@@ -269,7 +134,7 @@ async function render() {
   }
 
   // Use filtered options for scenes that require staff
-  const filteredOptions = filterOptions(scene, state);
+  const filteredOptions = typeof filterOptions === 'function' ? filterOptions(scene, state) : scene.options;
 
   app.innerHTML = `
     ${headerHtml}
