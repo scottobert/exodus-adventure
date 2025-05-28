@@ -177,13 +177,20 @@ function render() {
   if (!app) return;
   const state = game.getState();
 
-  // Header bar with title and inventory
+  // Header bar with title and inventory dropdown
   let inventoryHtml = '';
   const items = Object.entries(state.inventory);
   if (items.length > 0) {
-    inventoryHtml = `<div class="header-inventory-list">${items.map(([item, count]) => `
-      <div class=\"inventory-box\"><span class=\"inventory-item\">${item}</span><span class=\"inventory-count\">${count}</span></div>
-    `).join('')}</div>`;
+    inventoryHtml = `
+      <div class="header-inventory-dropdown">
+        <button class="inventory-dropdown-toggle" aria-haspopup="listbox" aria-expanded="false">Inventory (${items.length}) ▼</button>
+        <div class="inventory-dropdown-list" style="display:none;">
+          ${items.map(([item, count]) => `
+            <div class=\"inventory-box\"><span class=\"inventory-item\">${item}</span><span class=\"inventory-count\">${count}</span></div>
+          `).join('')}
+        </div>
+      </div>
+    `;
   } else {
     inventoryHtml = `<div class="header-inventory-list">Nothing</div>`;
   }
@@ -204,6 +211,31 @@ function render() {
       </div>
     </div>
   `;
+  // Dropdown logic
+  const dropdownToggle = app.querySelector<HTMLButtonElement>('.inventory-dropdown-toggle');
+  const dropdownList = app.querySelector<HTMLDivElement>('.inventory-dropdown-list');
+  if (dropdownToggle && dropdownList) {
+    dropdownList.style.display = 'none'; // Always start hidden
+    dropdownToggle.setAttribute('aria-expanded', 'false');
+    dropdownToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (dropdownList.style.display === 'none') {
+        dropdownList.style.display = 'flex';
+        dropdownToggle.setAttribute('aria-expanded', 'true');
+      } else {
+        dropdownList.style.display = 'none';
+        dropdownToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!dropdownToggle.contains(e.target as Node) && !dropdownList.contains(e.target as Node)) {
+        dropdownList.style.display = 'none';
+        dropdownToggle.setAttribute('aria-expanded', 'false');
+      }
+    }, true);
+  }
+
+  // Fix: Add event listeners for action buttons after dropdown logic
   const buttons = app.querySelectorAll<HTMLButtonElement>('.options button');
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
