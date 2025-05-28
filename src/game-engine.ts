@@ -17,6 +17,8 @@ export interface Scene {
     nextScene: string;
     effect?: (state: GameState) => void;
   }>;
+  backgroundImage?: string; // Optional background image for the scene
+  bibleVerse?: { book: string, chapter: number; verses: Array<number> }; // Optional Bible verse for the scene
 }
 
 export class ExodusGame {

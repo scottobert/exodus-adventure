@@ -1,5 +1,5 @@
 import './style.css';
-import { ExodusGame } from './game-engine';
+import { ExodusGame, type Scene } from './game-engine';
 
 // Utility to add inventory item
 function addInventory(state: any, item: string, amount = 1) {
@@ -12,6 +12,8 @@ const scenes = [
   {
     id: 'burning-bush',
     description: 'You see a bush that burns but is not consumed. A voice calls your name: "Moses, Moses!"',
+    backgroundImage: 'burning-bush.png', // Example image filename (should be in public/)
+    bibleVerse: { book: 'Exodus', chapter: 3, verses: [2] },
     options: [
       { text: 'Approach the bush', nextScene: 'god-speaks', effect: (state: any) => { addInventory(state, 'faith'); } },
       { text: 'Run away', nextScene: 'run-away' },
@@ -145,7 +147,6 @@ const scenes = [
     description: 'You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.',
     options: [
       { text: 'Celebrate the deliverance', nextScene: 'mount-sinai', effect: (state: any) => { addInventory(state, 'deliverance'); } },
-      { text: 'Check your inventory', nextScene: 'show-inventory' }
     ]
   },
   {
@@ -153,13 +154,6 @@ const scenes = [
     description: 'At Mount Sinai, God gives you the Ten Commandments. The people begin a new life as a free nation.',
     options: [
       { text: 'Reflect on the journey', nextScene: 'end', effect: (state: any) => { addInventory(state, 'wisdom'); } },
-      { text: 'Check your inventory', nextScene: 'show-inventory' }]
-  },
-  {
-    id: 'show-inventory',
-    description: 'You check your belongings: ',
-    options: [
-      { text: 'Continue', nextScene: 'end' }
     ]
   },
   {
@@ -169,9 +163,63 @@ const scenes = [
   }
 ];
 
+function filterOptions(scene: Scene, state: any) {
+  // Hide options that require the staff if the player doesn't have it
+  if (scene.id === 'pharaoh-palace' || scene.id === 'red-sea') {
+    return scene.options.filter(opt => {
+      if (opt.text.toLowerCase().includes('staff')) {
+        return state.inventory['staff'] > 0;
+      }
+      return true;
+    });
+  }
+  return scene.options;
+}
+
 const game = new ExodusGame(scenes, 'burning-bush');
 
-function render() {
+async function fetchBibleVerse(reference: Scene["bibleVerse"]): Promise<string> {
+  if (!reference || !reference.book || !reference.chapter || !reference.verses) {
+    console.warn('Invalid Bible verse reference:', reference);
+    return '';
+  }
+  console.log('Fetching Bible verse:', reference);
+  try {
+    const res = await fetch(`https://bible.helloao.org/api/ENGWEBP/${reference.book}/${reference.chapter}.json`);
+    const data = await res.json();
+    const versesArr = data?.chapter?.content?.filter((v: any) => reference.verses.includes(v.number));
+    // build the full text of all the verses
+    if (!versesArr) {
+      console.warn('No verses found for reference:', reference);
+      return '';
+    }
+    console.log('Fetched verses:', versesArr);
+    const verseText = versesArr.map((v: any) => {
+      console.log('Processing verse:', v);
+      const text = v.content.map((t: any) => {
+        console.log('Processing text part:', t);
+        if (typeof t === 'string') {
+          return t;
+        }
+      });
+      return text.join(' ');
+    });
+    const chapter = reference.chapter.toString();
+    const verse = reference.verses.join(', ');
+
+    if (verseText) {
+      return `<div class='bible-verse'><span class='bible-ref'>Exodus ${chapter}:${verse}</span> — <span class='bible-text'>${verseText}</span></div>`;
+    }
+    console.warn('No text found for verses:', reference.verses);
+    return '';
+  } catch (error) {
+    console.error('Error fetching Bible verse:', reference);
+    console.error(error);
+    return '';
+  }
+}
+
+async function render() {
   const scene = game.getCurrentScene();
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
@@ -202,13 +250,37 @@ function render() {
     </header>
   `;
 
+  // Background image logic
+  let backgroundHtml = '';
+  if (scene.backgroundImage) {
+    backgroundHtml = `<div class="scene-background"><img src="${scene.backgroundImage}" alt="Scene background" /></div>`;
+  }
+
+  // Bible verse placeholder
+  let bibleVerseHtml = '';
+  if (scene.bibleVerse) {
+    bibleVerseHtml = await fetchBibleVerse(scene.bibleVerse);
+  }
+
+  // Scene ID debug display (top left) if in debug environment
+  let debugIdHtml = '';
+  if (import.meta.env && import.meta.env.MODE === 'development') {
+    debugIdHtml = `<div class="scene-id-debug">${scene.id}</div>`;
+  }
+
+  // Use filtered options for scenes that require staff
+  const filteredOptions = filterOptions(scene, state);
+
   app.innerHTML = `
     ${headerHtml}
     <div class="game-container">
+      ${debugIdHtml}
+      ${backgroundHtml}
       <div class="scene-description">${scene.description}</div>
       <div class="options">
-        ${(scene.options || []).map((opt: any, i: number) => `<button data-index="${i}">${opt.text}</button>`).join('')}
+        ${filteredOptions.map((opt: any, i: number) => `<button data-index="${i}">${opt.text}</button>`).join('')}
       </div>
+      <div class="scene-bible-verse">${bibleVerseHtml}</div>
     </div>
   `;
   // Dropdown logic
@@ -237,9 +309,11 @@ function render() {
 
   // Fix: Add event listeners for action buttons after dropdown logic
   const buttons = app.querySelectorAll<HTMLButtonElement>('.options button');
-  buttons.forEach((btn) => {
+  buttons.forEach((btn, i) => {
     btn.addEventListener('click', () => {
-      game.chooseOption(parseInt(btn.getAttribute('data-index') || '0', 10));
+      // Use the filtered option's index in the original options array
+      const optionIndex = scene.options.findIndex(opt => opt.text === filteredOptions[i].text);
+      game.chooseOption(optionIndex);
       render();
     });
   });
