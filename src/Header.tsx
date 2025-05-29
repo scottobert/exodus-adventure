@@ -1,10 +1,16 @@
+import type { Scene } from './game-engine';
 import { useState } from 'react';
-type Props = { inventory: Record<string, number> };
-export function Header({ inventory }: Props) {
+type Props = { 
+  inventory: Record<string, number>;
+  isDev: boolean; 
+  scene: Scene;
+};
+export function Header({ inventory, isDev, scene }: Props) {
   const [open, setOpen] = useState(false);
   const items = Object.entries(inventory);
   return (
     <header className="game-header">
+      {isDev && <div className="scene-id-debug">{scene.id}</div>}
       <span className="header-title">Exodus Adventure</span>
       <div className="header-inventory-dropdown">
         <button

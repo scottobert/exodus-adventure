@@ -69,6 +69,8 @@ const App = () => {
   const [sceneId, setSceneId] = useState<string>('burning-bush');
   const [state, setState] = useState<GameState | null>(null);
   const [bibleVerse, setBibleVerse] = useState<string>('');
+  // Add state for the full chapter data
+  const [chapterData, setChapterData] = useState<any>(null);
 
   // Load scenes and initialize game
   useEffect(() => {
@@ -81,13 +83,18 @@ const App = () => {
     });
   }, []);
 
-  // Update bible verse on scene change
+  // Update bible verse and chapter data on scene change
   useEffect(() => {
     if (!scenes[sceneId]) return;
     if (scenes[sceneId].bibleVerse) {
       fetchBibleVerse(scenes[sceneId].bibleVerse).then(setBibleVerse);
+      // Fetch the full chapter JSON for the modal
+      fetch(`https://bible.helloao.org/api/ENGWEBP/Exodus/${scenes[sceneId].bibleVerse.chapter}.json`)
+        .then(res => res.json())
+        .then(setChapterData);
     } else {
       setBibleVerse('');
+      setChapterData(null);
     }
   }, [sceneId, scenes]);
 
@@ -111,13 +118,13 @@ const App = () => {
 
   return (
     <>
-      <Header inventory={state.inventory} />
+      <Header inventory={state.inventory} isDev={isDev} scene={scene} />
       <GameContainer
         scene={scene}
         filteredOptions={filteredOptions}
         onOption={handleOption}
         bibleVerse={bibleVerse}
-        isDev={isDev}
+        chapterData={chapterData}
       />
     </>
   );

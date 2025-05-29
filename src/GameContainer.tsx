@@ -8,13 +8,12 @@ type Props = {
   filteredOptions: Scene['options'];
   onOption: (i: number) => void;
   bibleVerse: string;
-  isDev: boolean;
+  chapterData?: any;
 };
 
-export function GameContainer({ scene, filteredOptions, onOption, bibleVerse, isDev }: Props) {
+export function GameContainer({ scene, filteredOptions, onOption, bibleVerse, chapterData }: Props) {
   return (
     <div className="game-container">
-      {isDev && <div className="scene-id-debug">{scene.id}</div>}
       {scene.backgroundImage && (
         <div className="scene-background">
           <img src={scene.backgroundImage} alt="Scene background" />
@@ -22,7 +21,9 @@ export function GameContainer({ scene, filteredOptions, onOption, bibleVerse, is
       )}
       <SceneDescription description={scene.description} />
       <Options options={filteredOptions} onOption={onOption} />
-      <BibleVerse html={bibleVerse} />
+      {/* Spacer to push BibleVerse to the bottom */}
+      <div style={{ flex: 1 }} />
+      <BibleVerse html={bibleVerse} chapterData={chapterData} />
     </div>
   );
 }

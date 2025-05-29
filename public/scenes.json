@@ -13,6 +13,7 @@
   {
     "id": "find-staff",
     "description": "You find a sturdy staff on the ground. It may be useful later.",
+    "backgroundImage": "burning-bush.png",
     "options": [
       { "text": "Return to the bush", "nextScene": "god-speaks" }
     ]
@@ -20,6 +21,7 @@
   {
     "id": "god-speaks",
     "description": "God speaks to you from the bush: \"Take off your sandals, for the place where you are standing is holy ground.\"",
+    "backgroundImage": "burning-bush.png",
     "options": [
       { "text": "Remove sandals and listen", "nextScene": "mission", "effect": "addInventory(state, 'obedience')" }
     ]
@@ -34,6 +36,7 @@
   {
     "id": "mission",
     "description": "God gives you a mission: \"Go to Pharaoh and bring my people out of Egypt.\"",
+    "backgroundImage": "burning-bush.png",
     "options": [
       { "text": "Accept the mission", "nextScene": "accepted", "effect": "addInventory(state, 'trust')" },
       { "text": "Refuse", "nextScene": "refused" }
@@ -41,6 +44,7 @@
   },
   {
     "id": "accepted",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "You accept God’s mission. Your journey begins! You travel to Egypt to confront Pharaoh.",
     "options": [
       { "text": "Go to Pharaoh’s palace", "nextScene": "pharaoh-palace" }
@@ -49,12 +53,14 @@
   {
     "id": "refused",
     "description": "You refuse, but God encourages you to trust Him.",
+    "backgroundImage": "burning-bush.png",
     "options": [
       { "text": "Accept the mission", "nextScene": "accepted" }
     ]
   },
   {
     "id": "pharaoh-palace",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "You stand before Pharaoh. He looks at you with suspicion. \"Let my people go,\" you declare.",
     "options": [
       { "text": "Demand release", "nextScene": "pharaoh-refuses" },
@@ -64,6 +70,7 @@
   },
   {
     "id": "pharaoh-softens",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "Pharaoh is surprised by your gift. He seems less hostile, but still refuses to let the people go.",
     "options": [
       { "text": "Warn of plagues", "nextScene": "plagues-begin" },
@@ -72,6 +79,7 @@
   },
   {
     "id": "negotiation",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "You attempt to negotiate with Pharaoh. He offers to let only some people go.",
     "options": [
       { "text": "Accept partial freedom", "nextScene": "partial-freedom" },
@@ -85,6 +93,7 @@
   },
   {
     "id": "pharaoh-refuses",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "Pharaoh refuses to let the Israelites go. God tells you to warn him of plagues.",
     "options": [
       { "text": "Warn of plagues", "nextScene": "plagues-begin" }
@@ -92,6 +101,7 @@
   },
   {
     "id": "staff-to-snake",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "You throw your staff down and it becomes a snake! Pharaoh’s magicians do the same. Pharaoh is unimpressed.",
     "options": [
       { "text": "Warn of plagues", "nextScene": "plagues-begin", "effect": "addInventory(state, 'perseverance')" }
@@ -99,6 +109,7 @@
   },
   {
     "id": "plagues-begin",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "The plagues begin: water turns to blood, frogs, gnats, and more. Pharaoh’s heart remains hard.",
     "options": [
       { "text": "Continue with more plagues", "nextScene": "final-plague" }
@@ -106,6 +117,7 @@
   },
   {
     "id": "final-plague",
+    "backgroundImage": "moses-in-egypt.png",
     "description": "The final plague strikes: the death of the firstborn. Pharaoh finally lets the Israelites go.",
     "options": [
       { "text": "Lead the people out", "nextScene": "red-sea" }
@@ -129,9 +141,11 @@
   },
   {
     "id": "sea-parts",
+    "backgroundImage": "parted-red-sea.png",
     "description": "The sea miraculously parts! Do you lead the people through?",
+    "bibleVerse": { "book": "Exodus", "chapter": 14, "verses": [21, 22] },
     "options": [
-      { "text": "Go back to the safety of Egypt and rule under Pharaoh.", "nextScene": "partial-freedom" },
+      { "text": "Go back to Egypt", "nextScene": "partial-freedom" },
       { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": "addInventory(state, 'faith')" },
       { "text": "Wait for a sign from God", "nextScene": "waiting-for-sign" }
     ]
