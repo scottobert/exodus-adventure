@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Scene } from './game-engine';
 
 type Props = {

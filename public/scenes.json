@@ -58,7 +58,7 @@
     "description": "You stand before Pharaoh. He looks at you with suspicion. \"Let my people go,\" you declare.",
     "options": [
       { "text": "Demand release", "nextScene": "pharaoh-refuses" },
-      { "text": "Show a sign", "nextScene": "staff-to-snake", "effect": "addInventory(state, 'borrowed staff')" },
+      { "text": "Show a sign", "nextScene": "staff-to-snake" },
       { "text": "Offer a gift", "nextScene": "pharaoh-softens" }
     ]
   },
@@ -115,7 +115,7 @@
     "id": "red-sea",
     "description": "You reach the Red Sea. Pharaoh’s army is pursuing you! The people panic.",
     "options": [
-      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": "addInventory(state, 'miraculous staff'); addInventory(state, 'deliverance')" },
+      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": "addInventory(state, 'deliverance')" },
       { "text": "Pray for help", "nextScene": "sea-parts", "effect": "addInventory(state, 'deliverance')" },
       { "text": "Look for another way around", "nextScene": "lost-in-desert" }
     ]
@@ -132,7 +132,8 @@
     "description": "The sea miraculously parts! Do you lead the people through?",
     "options": [
       { "text": "Go back to the safety of Egypt and rule under Pharaoh.", "nextScene": "partial-freedom" },
-      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea" }
+      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": "addInventory(state, 'faith')" },
+      { "text": "Wait for a sign from God", "nextScene": "waiting-for-sign" }
     ]
   },
   {
@@ -140,6 +141,13 @@
     "description": "You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.",
     "options": [
       { "text": "Celebrate the deliverance", "nextScene": "mount-sinai", "effect": "addInventory(state, 'deliverance')" }
+    ]
+  },  
+  {
+    "id": "waiting-for-sign",
+    "description": "You wait for a sign, but the waters begin to close. You must act quickly!",
+    "options": [
+      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea" }
     ]
   },
   {

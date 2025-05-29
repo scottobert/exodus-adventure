@@ -1,5 +1,4 @@
-import React from 'react';
-import type { Scene, GameState } from './game-engine';
+import type { Scene } from './game-engine';
 import { SceneDescription } from './SceneDescription';
 import { Options } from './Options';
 import { BibleVerse } from './BibleVerse';

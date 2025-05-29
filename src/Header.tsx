@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 type Props = { inventory: Record<string, number> };
 export function Header({ inventory }: Props) {
   const [open, setOpen] = useState(false);
