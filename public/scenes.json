@@ -1,5 +1,35 @@
 [
   {
+    "id": "home",
+    "description": "It's been 1 month since you found the entrance to a secret library in your attic. And today, something seems to be calling you back.",
+    "options": [
+      { "text": "Enter the library", "nextScene": "library", "effect": { "type": "addInventory", "item": "Exodus key" } },
+      { "text": "Ignore the call", "nextScene": "ignore-call" }
+    ]
+  },
+  {
+    "id": "library",
+    "description": "You step into the attic, and find the library door unlocked! Last time you were here, you opened the first book on the shelf and got teleported to another world. This time, you grab the book labeled, 'Exodus'. You find the key you got after your last adventure.",
+    "options": [
+      { "text": "Unlock the book", "nextScene": "unlocked", "effect": { "type": "subtractInventory", "item": "Exodus key" } }
+    ]
+  },
+
+  {
+    "id": "unlocked",
+    "description": "You unlock the book and flip to chapter 3 suddenly, you are on top of a mountain!",
+    "options": [
+      { "text": "Next", "nextScene": "burning-bush" }
+    ]
+  },
+  {
+    "id": "ignore-call",
+    "description": "You ignore the call and go about your day. But the memory of the library lingers in your mind.",
+    "options": [
+      { "text": "Return to the library", "nextScene": "library", "effect": { "type": "addInventory", "item": "Exodus key" } }
+    ]
+  },
+  {
     "id": "burning-bush",
     "description": "You see a bush that burns but is not consumed. A voice calls your name: \"Moses, Moses!\"",
     "backgroundImage": "burning-bush.png",
@@ -177,7 +207,35 @@
     "id": "end",
     "description": "You have led your people out of Egypt and received God’s law. The adventure continues in the wilderness...",
     "options": [
-      { "text": "Restart", "nextScene": "burning-bush", "effect": { "type": "resetInventory" } }
+      { "text": "End", "nextScene": "the chest"}
+    ]
+  },
+  {
+    "id": "the chest",
+    "description": "you find yourself back in the library, with a mysterious chest. It seems to glow with a faint radiance",
+    "options": [
+      { "text": "Unlock the chest", "nextScene": "chest-opened" , "effect": { "type": "addLeviticusKeyIfQualified"} }
+    ]
+  },
+  {
+    "id": "chest-opened",
+    "description": "You open the chest and find a key, with the word leviticus engraved on it. You realize this is the key to your next adventure.",
+    "options": [
+      { "text": "Return home", "nextScene": "locked out"}
+    ]
+  },
+  {
+    "id": "not-qualified",
+    "description": "You try to open the chest, but it remains locked. You sense you need more faith and deliverance before you can proceed.",
+    "options": [
+     { "text": "Restart", "nextScene": "burning-bush" }
+    ]
+  },
+  {
+    "id": "locked out",
+    "description": "You find yourself back in the attic, but the door is locked. You won't be able to go on your next adventure until it unlocks itself.",
+    "options": [
+      { "text": "Restart", "nextScene": "home" }
     ]
   }
 ]

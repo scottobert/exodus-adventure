@@ -7,13 +7,35 @@ import { GameContainer } from './GameContainer';
 
 // Helper to add inventory
 function addInventory(state: GameState, item: string, amount = 1) {
-  if (!state.inventory[item]) state.inventory[item] = 0;
+  if (!state.inventory[item]) {
+    state.inventory[item] = 0;
+  }
   state.inventory[item] += amount;
 }
 
 function resetInventory(state: GameState) {
   state.inventory = {
   };
+}
+
+function subtractInventory(state: GameState, item: string, amount = 1) {
+  if (state.inventory[item] && state.inventory[item] >= amount) {
+    state.inventory[item] -= amount;
+  }
+  if (state.inventory[item] <= 0) {
+    delete state.inventory[item];
+  }
+}
+
+// ...existing code...
+function addLeviticusKeyIfQualified(state: GameState) {
+  const hasDeliverance = state.inventory["deliverance"] && state.inventory["deliverance"] >= 2;
+  const hasFaith = state.inventory["faith"] && state.inventory["faith"] >= 2;
+  if (hasDeliverance && hasFaith) {
+    addInventory(state, "leviticus key", 1);
+    return true;
+  }
+  return false;
 }
 
 // Parse effect string to function
@@ -31,7 +53,7 @@ function parseEffect(effect: EffectObj | undefined) {
     console.warn("Effect is not an object with a type property. Ignoring effect:", effect);
     return undefined;
   }
-  return function(state: GameState) {
+  return function (state: GameState) {
     switch (effect.type) {
       case "addInventory":
         // Use a logging framework if available, otherwise fallback to console.log
@@ -41,6 +63,18 @@ function parseEffect(effect: EffectObj | undefined) {
       case "resetInventory":
         console.log("Resetting inventory");
         resetInventory(state);
+        break;
+      case "subtractInventory":
+        console.log(`Subtracting ${effect.amount ?? 1} of ${effect.item} from inventory`);
+        subtractInventory(state, effect.item, effect.amount ?? 1);
+        break;
+      case "addLeviticusKeyIfQualified":
+        console.log("Checking if Leviticus key can be added");
+        const qualified = addLeviticusKeyIfQualified(state);
+        if (!qualified) {
+          // If not qualified, force scene change
+          state.scene = "not-qualified";
+        }
         break;
       // Add more effect types as needed
       default:
@@ -98,7 +132,7 @@ function filterOptions(scene: Scene, state: GameState) {
 const App = () => {
   const [game, setGame] = useState<ExodusGame | null>(null);
   const [scenes, setScenes] = useState<Record<string, Scene>>({});
-  const [sceneId, setSceneId] = useState<string>('burning-bush');
+  const [sceneId, setSceneId] = useState<string>('home');
   const [state, setState] = useState<GameState | null>(null);
   const [bibleVerse, setBibleVerse] = useState<string>('');
   // Add state for the full chapter data
@@ -109,7 +143,7 @@ const App = () => {
     loadScenes().then(scenesArr => {
       const scenesObj = Object.fromEntries(scenesArr.map(s => [s.id, s]));
       setScenes(scenesObj);
-      const g = new ExodusGame(scenesArr, 'burning-bush');
+      const g = new ExodusGame(scenesArr, 'home');
       setGame(g);
       setState(g.getState());
     });
