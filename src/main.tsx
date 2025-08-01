@@ -17,10 +17,37 @@ function resetInventory(state: GameState) {
 }
 
 // Parse effect string to function
-function parseEffect(effect: string | undefined) {
+// Parse effect object to function
+type EffectObj = {
+  type: string;
+  [key: string]: any;
+};
+
+function parseEffect(effect: EffectObj | undefined) {
   if (!effect) return undefined;
+  // Handle legacy string effects or invalid formats
+  if (typeof effect === "string" || typeof effect !== "object" || !("type" in effect)) {
+    // Use a logging framework if available, otherwise fallback to console.warn
+    console.warn("Effect is not an object with a type property. Ignoring effect:", effect);
+    return undefined;
+  }
   return function(state: GameState) {
-    return (new Function('state', 'addInventory', 'resetInventory', effect))(state, addInventory, resetInventory);
+    switch (effect.type) {
+      case "addInventory":
+        // Use a logging framework if available, otherwise fallback to console.log
+        console.log(`Adding ${effect.amount ?? 1} of ${effect.item} to inventory`);
+        addInventory(state, effect.item, effect.amount ?? 1);
+        break;
+      case "resetInventory":
+        console.log("Resetting inventory");
+        resetInventory(state);
+        break;
+      // Add more effect types as needed
+      default:
+        // Unknown effect type, do nothing or log
+        console.error(`Unknown effect type: ${effect.type}`);
+        break;
+    }
   };
 }
 

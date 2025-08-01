@@ -5,9 +5,9 @@
     "backgroundImage": "burning-bush.png",
     "bibleVerse": { "book": "Exodus", "chapter": 3, "verses": [2] },
     "options": [
-      { "text": "Approach the bush", "nextScene": "god-speaks", "effect": "addInventory(state, 'faith')" },
+      { "text": "Approach the bush", "nextScene": "god-speaks", "effect": { "type": "addInventory", "item": "faith" } },
       { "text": "Run away", "nextScene": "run-away" },
-      { "text": "Look for a staff nearby", "nextScene": "find-staff", "effect": "addInventory(state, 'staff')" }
+      { "text": "Look for a staff nearby", "nextScene": "find-staff", "effect": { "type": "addInventory", "item": "staff" } }
     ]
   },
   {
@@ -23,7 +23,7 @@
     "description": "God speaks to you from the bush: \"Take off your sandals, for the place where you are standing is holy ground.\"",
     "backgroundImage": "burning-bush.png",
     "options": [
-      { "text": "Remove sandals and listen", "nextScene": "mission", "effect": "addInventory(state, 'obedience')" }
+      { "text": "Remove sandals and listen", "nextScene": "mission", "effect": { "type": "addInventory", "item": "obedience" } }
     ]
   },
   {
@@ -38,7 +38,7 @@
     "description": "God gives you a mission: \"Go to Pharaoh and bring my people out of Egypt.\"",
     "backgroundImage": "burning-bush.png",
     "options": [
-      { "text": "Accept the mission", "nextScene": "accepted", "effect": "addInventory(state, 'trust')" },
+      { "text": "Accept the mission", "nextScene": "accepted", "effect": { "type": "addInventory", "item": "trust" } },
       { "text": "Refuse", "nextScene": "refused" }
     ]
   },
@@ -112,7 +112,7 @@
     "backgroundImage": "moses-in-egypt.png",
     "description": "The plagues begin: water turns to blood, frogs, gnats, and more. Pharaoh’s heart remains hard.",
     "options": [
-      { "text": "Continue with more plagues", "nextScene": "final-plague", "effect": "addInventory(state, 'perseverance')" }
+      { "text": "Continue with more plagues", "nextScene": "final-plague", "effect": { "type": "addInventory", "item": "perseverance" } }
     ]
   },
   {
@@ -127,8 +127,8 @@
     "id": "red-sea",
     "description": "You reach the Red Sea. Pharaoh’s army is pursuing you! The people panic.",
     "options": [
-      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": "addInventory(state, 'deliverance')" },
-      { "text": "Pray for help", "nextScene": "sea-parts", "effect": "addInventory(state, 'deliverance')" },
+      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": { "type": "addInventory", "item": "deliverance" } },
+      { "text": "Pray for help", "nextScene": "sea-parts", "effect": { "type": "addInventory", "item": "deliverance" } },
       { "text": "Look for another way around", "nextScene": "lost-in-desert" }
     ]
   },
@@ -146,7 +146,7 @@
     "bibleVerse": { "book": "Exodus", "chapter": 14, "verses": [21, 22] },
     "options": [
       { "text": "Go back to Egypt", "nextScene": "partial-freedom" },
-      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": "addInventory(state, 'faith')" },
+      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": { "type": "addInventory", "item": "faith" } },
       { "text": "Wait for a sign from God", "nextScene": "waiting-for-sign" }
     ]
   },
@@ -154,7 +154,7 @@
     "id": "crossing-red-sea",
     "description": "You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.",
     "options": [
-      { "text": "Celebrate the deliverance", "nextScene": "mount-sinai", "effect": "addInventory(state, 'deliverance')" }
+      { "text": "Celebrate the deliverance", "nextScene": "mount-sinai", "effect": { "type": "addInventory", "item": "deliverance" } }
     ]
   },  
   {
@@ -168,14 +168,14 @@
     "id": "mount-sinai",
     "description": "At Mount Sinai, God gives you the Ten Commandments. The people begin a new life as a free nation.",
     "options": [
-      { "text": "Reflect on the journey", "nextScene": "end", "effect": "addInventory(state, 'wisdom')" }
+      { "text": "Reflect on the journey", "nextScene": "end", "effect": { "type": "addInventory", "item": "wisdom" } }
     ]
   },
   {
     "id": "end",
     "description": "You have led your people out of Egypt and received God’s law. The adventure continues in the wilderness...",
     "options": [
-      { "text": "restart", "nextScene": "burning-bush", "effect": "resetInventory(state)" }
+      { "text": "restart", "nextScene": "burning-bush", "effect": { "type": "resetInventory" } }
     ]
   }
 ]
