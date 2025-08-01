@@ -11,11 +11,16 @@ function addInventory(state: GameState, item: string, amount = 1) {
   state.inventory[item] += amount;
 }
 
+function resetInventory(state: GameState) {
+  state.inventory = {
+  };
+}
+
 // Parse effect string to function
 function parseEffect(effect: string | undefined) {
   if (!effect) return undefined;
   return function(state: GameState) {
-    return (new Function('state', 'addInventory', effect))(state, addInventory);
+    return (new Function('state', 'addInventory', 'resetInventory', effect))(state, addInventory, resetInventory);
   };
 }
 
