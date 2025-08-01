@@ -27,6 +27,16 @@ function subtractInventory(state: GameState, item: string, amount = 1) {
   }
 }
 
+// ...existing code...
+function addLeviticusKeyIfQualified(state: GameState) {
+  const hasDeliverance = state.inventory["deliverance"] && state.inventory["deliverance"] >= 2;
+  const hasFaith = state.inventory["faith"] && state.inventory["faith"] >= 2;
+  if (hasDeliverance && hasFaith) {
+    addInventory(state, "leviticus key", 1);
+    return true;
+  }
+  return false;
+}
 
 // Parse effect string to function
 // Parse effect object to function
@@ -57,6 +67,14 @@ function parseEffect(effect: EffectObj | undefined) {
       case "subtractInventory":
         console.log(`Subtracting ${effect.amount ?? 1} of ${effect.item} from inventory`);
         subtractInventory(state, effect.item, effect.amount ?? 1);
+        break;
+      case "addLeviticusKeyIfQualified":
+        console.log("Checking if Leviticus key can be added");
+        const qualified = addLeviticusKeyIfQualified(state);
+        if (!qualified) {
+          // If not qualified, force scene change
+          state.scene = "not-qualified";
+        }
         break;
       // Add more effect types as needed
       default:

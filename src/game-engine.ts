@@ -37,10 +37,14 @@ export class ExodusGame {
   chooseOption(index: number): void {
     const scene = this.getCurrentScene();
     const option = scene.options[index];
+    const prevScene = this.state.scene;
     if (option.effect) option.effect(this.state);
     this.state.history.push(scene.id);
-    this.state.scene = option.nextScene;
-  }
+    // Only set nextScene if the effect did not change it
+    if (this.state.scene === prevScene) {
+      this.state.scene = option.nextScene;
+    }
+}
 
   getState(): GameState {
     return { ...this.state };
