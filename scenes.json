@@ -89,7 +89,9 @@
   {
     "id": "partial-freedom",
     "description": "Some Israelites are freed, but many remain. The story ends with hope for the rest.",
-    "options": []
+    "options": [
+        { "text": "Restart", "nextScene": "burning-bush", "effect": { "type": "resetInventory" } }
+    ]
   },
   {
     "id": "pharaoh-refuses",
