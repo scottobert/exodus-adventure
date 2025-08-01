@@ -175,7 +175,7 @@
     "id": "end",
     "description": "You have led your people out of Egypt and received God’s law. The adventure continues in the wilderness...",
     "options": [
-      { "text": "restart", "nextScene": "burning-bush", "effect": { "type": "resetInventory" } }
+      { "text": "Restart", "nextScene": "burning-bush", "effect": { "type": "resetInventory" } }
     ]
   }
 ]
