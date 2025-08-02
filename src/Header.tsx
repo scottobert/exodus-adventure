@@ -21,7 +21,7 @@ export function Header({ inventory, isDev, scene, traits }: Props) {
             className="inventory-dropdown-toggle"
             aria-haspopup="listbox"
             aria-expanded={inventoryOpen}
-            onClick={e => { e.stopPropagation(); setInventoryOpen(o => !o); }}
+            onClick={e => { e.stopPropagation(); setInventoryOpen(o => !o); setTraitsOpen(false); }}
           >
             Inventory ({inventoryItems.length}) ▼
           </button>
@@ -45,7 +45,7 @@ export function Header({ inventory, isDev, scene, traits }: Props) {
             className="traits-dropdown-toggle"
             aria-haspopup="listbox"
             aria-expanded={traitsOpen}
-            onClick={e => { e.stopPropagation(); setTraitsOpen(o => !o); }}
+            onClick={e => { e.stopPropagation(); setTraitsOpen(o => !o); setInventoryOpen(false); }}
           >
             Traits ({traitItems.length}) ▼
           </button>

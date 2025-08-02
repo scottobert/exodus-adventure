@@ -176,11 +176,11 @@ button:focus-visible {
   font-weight: 500;
   font-size: 1rem;
 }
-.inventory-item, .trait-item {
+.inventory-item, .traits-item {
   margin-right: 0.5rem;
   font-weight: 600;
 }
-.inventory-count, .trait-count {
+.inventory-count, .traits-count {
   background: #2d6cdf;
   color: #fff;
   border-radius: 50%;
