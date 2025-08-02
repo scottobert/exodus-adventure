@@ -6,7 +6,7 @@ type Props = {
   scene: Scene;
   traits: Record<string, number>;
 };
-export function Header({ inventory, isDev, scene, traits }: Props) {
+export function Header({ inventory, isDev, scene, traits }: Readonly<Props>) {
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [traitsOpen, setTraitsOpen] = useState(false);
   const inventoryItems = Object.entries(inventory);
