@@ -216,7 +216,7 @@ const App = () => {
 
   return (
     <>
-      <Header inventory={state.inventory} isDev={isDev} scene={scene} />
+      <Header inventory={state.inventory} isDev={isDev} scene={scene} traits={state.traits} />
       <GameContainer
         scene={scene}
         filteredOptions={filteredOptions}

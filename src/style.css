@@ -116,18 +116,23 @@ button:focus-visible {
   letter-spacing: 1px;
   padding: 2rem;
 }
-.header-inventory {
+.header-dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-inventory, .header-traits {
   font-size: 1rem;
   font-weight: 400;
   padding: 2rem;
 }
 
-.header-inventory-dropdown {
+.header-inventory-dropdown, .header-traits-dropdown {
   position: relative;
   display: flex;
   align-items: center;
 }
-.inventory-dropdown-toggle {
+.inventory-dropdown-toggle, .traits-dropdown-toggle {
   background: #fff;
   color: #2d6cdf;
   border: none;
@@ -142,10 +147,10 @@ button:focus-visible {
   gap: 0.5rem;
   transition: background 0.2s;
 }
-.inventory-dropdown-toggle[aria-expanded="true"] {
+.inventory-dropdown-toggle[aria-expanded="true"], .traits-dropdown-toggle[aria-expanded="true"] {
   background: #e6edfa;
 }
-.inventory-dropdown-list {
+.inventory-dropdown-list, .traits-dropdown-list {
   position: absolute;
   top: 110%;
   right: 0;
@@ -160,7 +165,7 @@ button:focus-visible {
   flex-direction: column;
   gap: 0.5rem;
 }
-.inventory-box {
+.inventory-box, .traits-box {
   background: #f5f8ff;
   color: #2d6cdf;
   border-radius: 8px;
@@ -171,11 +176,11 @@ button:focus-visible {
   font-weight: 500;
   font-size: 1rem;
 }
-.inventory-item {
+.inventory-item, .trait-item {
   margin-right: 0.5rem;
   font-weight: 600;
 }
-.inventory-count {
+.inventory-count, .trait-count {
   background: #2d6cdf;
   color: #fff;
   border-radius: 50%;
