@@ -26,11 +26,31 @@ function subtractInventory(state: GameState, item: string, amount = 1) {
     delete state.inventory[item];
   }
 }
+// Helper to add traits
+function addTrait(state: GameState, item: string, amount = 1) {
+  if (!state.traits[item]) {
+    state.traits[item] = 0;
+  }
+  state.traits[item] += amount;
+}
 
-// ...existing code...
+function resetTraits(state: GameState) {
+  state.traits = {
+  };
+}
+
+function subtractTraits(state: GameState, item: string, amount = 1) {
+  if (state.traits[item] && state.traits[item] >= amount) {
+    state.traits[item] -= amount;
+  }
+  if (state.traits[item] <= 0) {
+    delete state.traits[item];
+  }
+}
+
 function addLeviticusKeyIfQualified(state: GameState) {
-  const hasDeliverance = state.inventory["deliverance"] && state.inventory["deliverance"] >= 2;
-  const hasFaith = state.inventory["faith"] && state.inventory["faith"] >= 2;
+  const hasDeliverance = state.traits["deliverance"] && state.traits["deliverance"] >= 2;
+  const hasFaith = state.traits["faith"] && state.traits["faith"] >= 2;
   if (hasDeliverance && hasFaith) {
     addInventory(state, "leviticus key", 1);
     return true;
@@ -75,6 +95,18 @@ function parseEffect(effect: EffectObj | undefined) {
           // If not qualified, force scene change
           state.scene = "not-qualified";
         }
+        break;
+      case "addTrait":
+        console.log(`Adding ${effect.amount ?? 1} of ${effect.item} to traits`);
+        addTrait(state, effect.item, effect.amount ?? 1);
+        break;
+      case "resetTraits":
+        console.log("Resetting traits");
+        resetTraits(state);
+        break;
+      case "subtractTraits":
+        console.log(`Subtracting ${effect.amount ?? 1} of ${effect.item} from traits`);
+        subtractTraits(state, effect.item, effect.amount ?? 1);
         break;
       // Add more effect types as needed
       default:
