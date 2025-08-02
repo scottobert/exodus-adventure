@@ -3,10 +3,15 @@ export interface Inventory {
   [item: string]: number;
 }
 
+export interface Traits {
+  [trait: string]: number;
+}
+
 export interface GameState {
   scene: string;
   inventory: Inventory;
   history: string[];
+  traits: Traits;
 }
 
 export interface Scene {
@@ -27,9 +32,9 @@ export class ExodusGame {
 
   constructor(scenes: Scene[], initialScene: string) {
     this.scenes = Object.fromEntries(scenes.map(s => [s.id, s]));
-    this.state = { scene: initialScene, inventory: {}, history: [] };
+    this.state = { scene: initialScene, inventory: {}, history: [], traits: {} };
   }
-
+  
   getCurrentScene(): Scene {
     return this.scenes[this.state.scene];
   }

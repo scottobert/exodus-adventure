@@ -35,7 +35,7 @@
     "backgroundImage": "burning-bush.png",
     "bibleVerse": { "book": "Exodus", "chapter": 3, "verses": [2] },
     "options": [
-      { "text": "Approach the bush", "nextScene": "god-speaks", "effect": { "type": "addInventory", "item": "faith" } },
+      { "text": "Approach the bush", "nextScene": "god-speaks", "effect": { "type": "addTrait", "item": "faith" } },
       { "text": "Run away", "nextScene": "run-away" },
       { "text": "Look for a staff nearby", "nextScene": "find-staff", "effect": { "type": "addInventory", "item": "staff" } }
     ]
@@ -53,7 +53,7 @@
     "description": "God speaks to you from the bush: \"Take off your sandals, for the place where you are standing is holy ground.\"",
     "backgroundImage": "burning-bush.png",
     "options": [
-      { "text": "Remove sandals and listen", "nextScene": "mission", "effect": { "type": "addInventory", "item": "obedience" } }
+      { "text": "Remove sandals and listen", "nextScene": "mission", "effect": { "type": "addTrait", "item": "obedience" } }
     ]
   },
   {
@@ -68,7 +68,7 @@
     "description": "God gives you a mission: \"Go to Pharaoh and bring my people out of Egypt.\"",
     "backgroundImage": "burning-bush.png",
     "options": [
-      { "text": "Accept the mission", "nextScene": "accepted", "effect": { "type": "addInventory", "item": "trust" } },
+      { "text": "Accept the mission", "nextScene": "accepted", "effect": { "type": "addTrait", "item": "trust" } },
       { "text": "Refuse", "nextScene": "refused" }
     ]
   },
@@ -144,7 +144,7 @@
     "backgroundImage": "moses-in-egypt.png",
     "description": "The plagues begin: water turns to blood, frogs, gnats, and more. Pharaoh’s heart remains hard.",
     "options": [
-      { "text": "Continue with more plagues", "nextScene": "final-plague", "effect": { "type": "addInventory", "item": "perseverance" } }
+      { "text": "Continue with more plagues", "nextScene": "final-plague", "effect": { "type": "addTrait", "item": "perseverance" } }
     ]
   },
   {
@@ -159,8 +159,8 @@
     "id": "red-sea",
     "description": "You reach the Red Sea. Pharaoh’s army is pursuing you! The people panic.",
     "options": [
-      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": { "type": "addInventory", "item": "deliverance" } },
-      { "text": "Pray for help", "nextScene": "sea-parts", "effect": { "type": "addInventory", "item": "deliverance" } },
+      { "text": "Raise your staff", "nextScene": "sea-parts", "effect": { "type": "addTrait", "item": "deliverance" } },
+      { "text": "Pray for help", "nextScene": "sea-parts", "effect": { "type": "addTrait", "item": "deliverance" } },
       { "text": "Look for another way around", "nextScene": "lost-in-desert" }
     ]
   },
@@ -178,7 +178,7 @@
     "bibleVerse": { "book": "Exodus", "chapter": 14, "verses": [21, 22] },
     "options": [
       { "text": "Go back to Egypt", "nextScene": "partial-freedom" },
-      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": { "type": "addInventory", "item": "faith" } },
+      { "text": "Lead the people through the sea", "nextScene": "crossing-red-sea", "effect": { "type": "addTrait", "item": "faith" } },
       { "text": "Wait for a sign from God", "nextScene": "waiting-for-sign" }
     ]
   },
@@ -186,7 +186,7 @@
     "id": "crossing-red-sea",
     "description": "You lead the people through the dry seabed. The waters close behind you, drowning Pharaoh’s army.",
     "options": [
-      { "text": "Celebrate the deliverance", "nextScene": "mount-sinai", "effect": { "type": "addInventory", "item": "deliverance" } }
+      { "text": "Celebrate the deliverance", "nextScene": "mount-sinai", "effect": { "type": "addTrait", "item": "deliverance" } }
     ]
   },  
   {
@@ -200,7 +200,7 @@
     "id": "mount-sinai",
     "description": "At Mount Sinai, God gives you the Ten Commandments. The people begin a new life as a free nation.",
     "options": [
-      { "text": "Reflect on the journey", "nextScene": "end", "effect": { "type": "addInventory", "item": "wisdom" } }
+      { "text": "Reflect on the journey", "nextScene": "end", "effect": { "type": "addTrait", "item": "wisdom" } }
     ]
   },
   {
@@ -212,7 +212,7 @@
   },
   {
     "id": "the chest",
-    "description": "you find yourself back in the library, with a mysterious chest. It seems to glow with a faint radiance",
+    "description": "You find yourself back in the library, with a mysterious chest. It seems to glow with a faint radiance",
     "options": [
       { "text": "Unlock the chest", "nextScene": "chest-opened" , "effect": { "type": "addLeviticusKeyIfQualified"} }
     ]
@@ -235,7 +235,7 @@
     "id": "locked out",
     "description": "You find yourself back in the attic, but the door is locked. You won't be able to go on your next adventure until it unlocks itself.",
     "options": [
-      { "text": "Restart", "nextScene": "home" }
+      { "text": "Restart", "nextScene": "home", "effect": { "type": "resetInventory" } }
     ]
   }
 ]
